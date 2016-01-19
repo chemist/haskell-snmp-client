@@ -1,0 +1,52 @@
+name:                snmp-client
+version:             0.1.0.0
+synopsis:            SNMP client implementation.
+description:         Please see README.md
+license:             BSD3
+license-file:        LICENSE
+author:              Anton Kondrachkov, Alexey Smirnov
+maintainer:          Anton Kondrachkov <simplex91@gmail.com>, Alexey Smirnov <chemistmail@gmail.com>
+category:            Network
+build-type:          Simple
+-- extra-source-files:
+cabal-version:       >=1.10
+
+library
+  hs-source-dirs:      src
+  exposed-modules:     Network.Snmp.Client
+                     , Network.Snmp.Client.Api
+                     , Network.Snmp.Client.Types
+                     , Network.Snmp.Client.Config
+                     , Network.Snmp.Client.Simple
+                     , Network.Snmp.Client.Exception
+                     , Network.Snmp.Client.Walk.Simple
+                     , Network.Snmp.Client.Walk.Pipes
+
+  other-modules:       Network.Snmp.Client.Simple.Community
+                     , Network.Snmp.Client.Simple.Usm
+                     , Network.Snmp.Client.Internal
+                     , Network.Snmp.Client.Internal.Socket
+                     , Network.Snmp.Client.Internal.Usm
+                     , Network.Snmp.Client.Internal.Community
+
+  build-depends:       base >= 4.7 && < 5
+                     , basic-prelude
+                     , snmp >= 0.3
+                     , binary
+                     , bytestring
+                     , time
+                     , dlist
+                     , exceptions
+                     , network-info
+                     , random
+                     , socket
+                     , pipes
+                     , stm
+  ghc-options:
+    -Wall
+    -Werror
+  ghc-prof-options:
+    -fprof-auto
+    -fprof-cafs
+  default-language:    Haskell2010
+
