@@ -142,7 +142,9 @@ instance SnmpManager Client where
 
 msec :: Int -> Timeout
 msec = Timeout . (* 1000)
+{-# INLINE msec #-}
 
 sec :: Int -> Timeout
 sec = Timeout . (* 1000000)
+{-# INLINE sec #-}
 
