@@ -30,24 +30,29 @@ data SomeClientException
 
 instance Show SomeClientException where
     show (SomeClientException e) = Prelude.show e
+    {-# INLINE show #-}
 
 instance Exception SomeClientException
 
-data TimeoutException
+newtype TimeoutException
     = TimeoutException Int
   deriving (Eq, Typeable, Show)
 
 instance Exception TimeoutException where
     fromException = clientExceptionFromException
+    {-# INLINE fromException #-}
     toException = clientExceptionToException
+    {-# INLINE toException #-}
 
-data SnmpEngineException
+newtype SnmpEngineException
     = SnmpEngineException Coupla
   deriving (Eq, Typeable, Show)
 
 instance Exception SnmpEngineException where
     fromException = clientExceptionFromException
+    {-# INLINE fromException #-}
     toException = clientExceptionToException
+    {-# INLINE toException #-}
 
 --------------------------------------------------------------------------------
 
