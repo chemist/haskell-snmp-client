@@ -45,6 +45,11 @@ data CommunityClient = CommunityClient
   }
 
 instance SnmpManager CommunityClient where
+    managerAddress = return . Hostname . encodeUtf8 . show . address
+    managerVersion = return . getVersion . packet
+    managerTimeout = return . timeout
+    managerRetries = return . retries
+
     reqSuiteTR = talkClient
     {-# INLINE reqSuiteTR #-}
     reqSuite cl@CommunityClient{timeout, retries} r = talkClient cl r timeout retries

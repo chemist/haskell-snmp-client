@@ -110,6 +110,11 @@ newtype RetryCount
 -- | SnmpManager class.
 -- Provides an interface to request data from Snmp manager.
 class SnmpManager a where
+    managerAddress :: a -> IO Hostname
+    managerVersion :: a -> IO Version
+    managerTimeout :: a -> IO Timeout
+    managerRetries :: a -> IO RetryCount
+
     reqSuite :: a -> Request -> Suite -> IO Suite
     reqSuiteTR :: a -> Request -> Timeout -> RetryCount -> Suite -> IO Suite
 
@@ -118,8 +123,18 @@ data Client = forall a. (Typeable a, Show a, SnmpManager a) => Client a
 
 instance Show Client where
     show (Client a) = Prelude.show a
+    {-# INLINE show #-}
 
 instance SnmpManager Client where
+    managerAddress (Client a) = managerAddress a
+    {-# INLINE managerAddress #-}
+    managerVersion (Client a) = managerVersion a
+    {-# INLINE managerVersion #-}
+    managerTimeout (Client a) = managerTimeout a
+    {-# INLINE managerTimeout #-}
+    managerRetries (Client a) = managerRetries a
+    {-# INLINE managerRetries #-}
+
     reqSuite (Client a) = reqSuite a
     {-# INLINE reqSuite #-}
     reqSuiteTR (Client a) = reqSuiteTR a

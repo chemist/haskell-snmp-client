@@ -14,6 +14,10 @@
 module Network.Snmp.Client.Api
   ( Client(..)
   , SnmpManager
+  , getAddress
+  , getVersion
+  , getTimeout
+  , getRetries
   , get
   , getTR
   , getnext
@@ -26,6 +30,30 @@ module Network.Snmp.Client.Api
 
 import           BasicPrelude
 import           Network.Snmp.Client.Types
+
+getAddress :: (MonadIO m, SnmpManager c)
+         => c
+         -> m Hostname
+getAddress = liftIO . managerAddress
+{-# INLINE getAddress #-}
+
+getVersion :: (MonadIO m, SnmpManager c)
+        => c
+        -> m Version
+getVersion = liftIO . managerVersion
+{-# INLINE getVersion #-}
+
+getTimeout :: (MonadIO m, SnmpManager c)
+        => c
+        -> m Timeout
+getTimeout = liftIO . managerTimeout
+{-# INLINE getTimeout #-}
+
+getRetries :: (MonadIO m, SnmpManager c)
+        => c
+        -> m RetryCount
+getRetries = liftIO . managerRetries
+{-# INLINE getRetries #-}
 
 get :: (MonadIO m, SnmpManager c)
     => c

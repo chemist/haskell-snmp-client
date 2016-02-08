@@ -95,6 +95,11 @@ usmClient host port to rc usm@Usm{..} = do
         return sock
 
 instance SnmpManager UsmClient where
+    managerAddress = return . Hostname . encodeUtf8 . show . address
+    managerVersion _ = return Version3
+    managerTimeout = return . timeout
+    managerRetries = return . retries
+
     reqSuiteTR = talkClient
     {-# INLINE reqSuiteTR #-}
     reqSuite cl@UsmClient{timeout, retries} r =
