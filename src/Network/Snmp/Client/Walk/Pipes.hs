@@ -53,7 +53,7 @@ bulkwalk c (x:xs) = gowalk x >> bulkwalk c xs
   where
     filterBinds = takeWhile (\(Coupla oi' _) -> not $ isUpLevel oi' x)
     gowalk oi = do
-        Suite binds <- liftIO $ getbulk c [oi]
+        Suite binds <- liftIO $ getbulk c 0 30 [oi]
         let Coupla nextOid nextValue = last binds
         case (isUpLevel nextOid x, nextValue) of
             (True, _) -> void $ Pipes.yield (filterBinds binds)
