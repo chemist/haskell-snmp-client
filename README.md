@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/SimpleX91/haskell-snmp-client.svg?branch=master)](https://travis-ci.org/SimpleX91/haskell-snmp-client)
 # Haskell SNMP Client
 Haskell Snmp client implementation. Supports v1, v2c and v3 protocol versions.
 
