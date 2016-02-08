@@ -78,7 +78,7 @@ data AuthInfo
     = AuthInfo
     { authType     :: !AuthType
     , authPassword :: !Password
-    } deriving (Eq, Show)
+    } deriving (Eq, Ord, Show)
 
 -- | SnmpV3 Usm private information.
 -- Used for PDU ecnryption with AuthPriv security level.
@@ -86,24 +86,26 @@ data PrivInfo
     = PrivInfo
     { privType     :: !PrivType
     , privPassword :: !Password
-    } deriving (Eq, Show)
+    } deriving (Eq, Ord, Show)
 
 newtype Hostname
     = Hostname ByteString
       -- ^ Hostname or IP address octets.
-    deriving (Eq, Show)
+  deriving (Eq, Ord, Show)
 newtype Port
     = Port Word16
       -- ^ Port (1-65535), default 161.
-    deriving (Eq, Show)
+  deriving (Eq, Ord, Show)
+
 newtype Timeout
     = Timeout Int
       -- ^ Timeout (msec). Time to wait for response.
-    deriving (Eq, Show)
+  deriving (Eq, Ord, Show)
+
 newtype RetryCount
     = RetryCount Int
       -- ^ Retries. How many times engine should resend request on timeout.
-    deriving (Eq, Show)
+  deriving (Eq, Ord, Show)
 
 -- | SnmpManager class.
 -- Provides an interface to request data from Snmp manager.
