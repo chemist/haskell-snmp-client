@@ -1,39 +1,51 @@
-snmp
-====
+[![Build Status](https://travis-ci.org/SimpleX91/haskell-snmp-client.svg?branch=master)](https://travis-ci.org/SimpleX91/haskell-snmp-client)
+# Haskell SNMP Client
+Haskell Snmp client implementation. Supports v1, v2c and v3 protocol versions.
 
-[![Build Status](https://travis-ci.org/SimpleX91/snmp.svg?branch=master)](https://travis-ci.org/SimpleX91/snmp)
-[![Gitter chat](https://badges.gitter.im/chemist/snmp.png)](https://gitter.im/chemist/snmp)
-
-SNMP protocol implementation. Supports v1, v2c and v3 versions.
-
-Usage example:
+## Example
 ```haskell
-import Network.Protocol.Snmp
-import Control.Applicative
-import Network.Socket.ByteString (recv, sendAll)
-import Network.Socket hiding (recv, sendAll)
+{-# LANGUAGE NoImplicitPrelude #-}
+{-# LANGUAGE OverloadedStrings #-}
 
--- create new empty packet
-v2 :: Packet
-v2 = initial Version2
+import           BasicPrelude
 
-community = Community "hello"
+import           Pipes
 
-oi = Coupla [1,3,6,1,2,1,1,4,0] Zero
+import           Network.Snmp.Client
+import           Network.Snmp.Client.Simple
+import           Network.Snmp.Client.Walk.Pipes
 
--- set community, oid
-packet :: Community -> Coupla -> Packet
-packet community oi =
-  setCommunityP community . setSuite (Suite [oi]) $ v2
+host1, host3 :: Hostname
+host1 = Hostname "localhost"
+host3 = Hostname "localhost"
 
--- here must be code for create udp socket
-makeSocket :: Hostname -> Port -> IO Socket
-makeSocket = undefined
+security3 :: Usm
+security3 = Usm { username = "guest"
+                , auth = Just (AuthInfo MD5 "myauthpassword")
+                , priv = Nothing
+                , level = AuthNoPriv
+                }
 
 main :: IO ()
 main = do
-   socket <- makeSocket "localhost" "161"
-   sendAll socket $ encode $ setRequest (GetRequest 1 0 0) packet
-   result <- decode <$> recv socket 1500 :: IO Packet
-   print $ getSuite result
+    let conf1 = (initial Version1) { hostname = host1 }
+        conf3 = (initial Version3) { hostname = host3
+                                   , security = security3
+                                   }
+        ifTable = fmap oidFromBS ["1.3.6.1.2.1.2.2"]
+        sysObjectID = fmap oidFromBS ["1.3.6.1.2.1.1.2.0"]
+
+    -- Make SnmpV1 client.
+    cl1 <- client conf1
+    -- Make SnmpV3 client.
+    cl3 <- client conf3
+
+    print =<< get cl1 sysObjectID
+    print =<< getnext cl1 sysObjectID
+
+    print =<< get cl3 sysObjectID
+    print =<< getnext cl3 sysObjectID
+
+    Pipes.runEffect $ walk cl1 ifTable >-> forever (await >>= print)
+    Pipes.runEffect $ walk cl3 ifTable >-> forever (await >>= print)
 ```

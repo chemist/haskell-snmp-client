@@ -5,11 +5,22 @@ resolver: lts-5.2
 
 # Local packages, usually specified by relative directory name
 packages:
+<<<<<<< HEAD
 - '.'
 
 # Packages to be pulled from upstream that are not in the resolver (e.g., acme-missiles-0.3)
 #extra-deps:
 #  - socket-0.5.3.0
+=======
+  - location:
+      git: https://github.com/SimpleX91/snmp
+      commit: d0c1bf6e27335812455064d8d5d3e81b6f85c389
+  - '.'
+
+# Packages to be pulled from upstream that are not in the resolver (e.g., acme-missiles-0.3)
+extra-deps:
+  - socket-0.5.3.0
+>>>>>>> b4d4c33f977c1d811432e998b924f0d0f8807af8
 
 # Override default flag values for local packages and extra-deps
 flags: {}
